@@ -1,0 +1,111 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlinx-serialization'
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-parcelize"
+apply plugin: 'kotlin-kapt'
+
+android {
+    namespace 'com.example.entain.api'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 29
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        release {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures{
+        buildConfig = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+}
+
+dependencies {
+
+    implementation "androidx.core:core-ktx:$versions.core_ktx"
+
+    implementation "androidx.multidex:multidex:$versions.multidex"
+
+    // for rx retrofit
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp_logging_interceptor"
+    implementation "io.reactivex.rxjava3:rxkotlin:$versions.rx_kotlin"
+    implementation "io.reactivex.rxjava3:rxandroid:$versions.rxandroid"
+
+    implementation "com.squareup.retrofit2:adapter-rxjava3:$versions.retrofit_adapter_rxjava3"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+
+    // Koin for Android
+    implementation "io.insert-koin:koin-android:$versions.koin"
+
+    //Coroutines start
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+    //Coroutines end
+
+    // Mock retrofit dependencies
+    debugImplementation "com.squareup.retrofit2:retrofit-mock:$versions.retrofit_mock"
+
+    //junit 5
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$versions.jupiter_junit_5")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$versions.jupiter_junit_5")
+
+    //koin
+    testImplementation "io.insert-koin:koin-test:$versions.koin"
+
+    // Mock-webserver dependency here
+    testImplementation "com.squareup.okhttp3:mockwebserver:$versions.mockwebserver"
+
+    //junit 5
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$versions.jupiter_junit_5")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$versions.jupiter_junit_5")
+
+    // for InstantTaskExecutorRule
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+
+    //koin
+    testImplementation "io.insert-koin:koin-test:$versions.koin"
+
+    //mockk for junit
+    testImplementation "io.mockk:mockk:$versions.mockk"
+    testImplementation "io.mockk:mockk-agent-jvm:$versions.mockk"
+
+    testImplementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
+    testImplementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+    testImplementation 'org.threeten:threetenbp:1.5.1'
+
+    //coroutines
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+}
