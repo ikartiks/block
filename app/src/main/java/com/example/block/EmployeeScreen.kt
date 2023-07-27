@@ -1,6 +1,7 @@
 package com.example.block
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +38,17 @@ import kotlin.random.Random
 @Composable
 fun RacesScreen(vm: EmployeeViewModel) {
     Column(modifier = Modifier.padding(20.dp)) {
+        PullToRefresh(vm = vm)
         EmployeeList(vm = vm)
+    }
+}
+
+@Composable
+fun PullToRefresh(vm: EmployeeViewModel) {
+    Button(onClick = {
+        vm.fetchLatestData()
+    }) {
+        AppText(text = "Click to refresh.")
     }
 }
 
@@ -51,9 +63,11 @@ fun EmployeeList(vm: EmployeeViewModel) {
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp10)),
                 modifier = Modifier.padding(top = 20.dp)
             ) {
-                val list = data.value.data!!
-                items(items = list.employees) { employee ->
-                    EmployeeComposable(employee)
+                val list = data.value.data
+                list?.let {
+                    items(items = list.employees) { employee ->
+                        EmployeeComposable(employee)
+                    }
                 }
             }
         }
@@ -109,8 +123,7 @@ fun EmployeeComposable(
             )
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(dimensionResource(id = R.dimen.dp15)),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(dimensionResource(id = R.dimen.dp15))
     ) {
 
         Row(){
@@ -122,7 +135,7 @@ fun EmployeeComposable(
                     .width(60.dp),
             )
             Column {
-                AppText(employee.fullName)
+                AppText(employee.fullName, modifier = Modifier.padding(top = 10.dp))
                 AppText(employee.phoneNumber)
             }
         }
